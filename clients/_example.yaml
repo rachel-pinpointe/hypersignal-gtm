@@ -1,0 +1,61 @@
+# Template monitor. Files starting with "_" are ignored by the loader.
+# Copy to <yourmonitor>.yaml and edit, or just build one in the dashboard — the UI writes this
+# same shape, and editing a monitor there rewrites its file.
+#
+# Two kinds, and the kind decides which fields matter:
+#   kind: search     Keyword-first (Client Monitoring). "Find everyone hiring for X."
+#   kind: watchlist  Domain-first  (Account Monitoring). "Watch THESE companies."
+name: example
+active: true
+kind: search
+
+# Everything about WHAT to look for lives under `search`.
+search:
+  keywords: ["bookkeeper", "data entry", "customer support"]
+  exclude: ["senior", "director"]          # drop a posting whose text mentions any of these
+  excludeCompanies: ["Acme Staffing"]      # drop postings from these employers entirely
+
+  # corporate       = hiring.cafe only (the backbone; it covers what the old RSS/aggregator
+  #                   adapters used to, which is why they were removed)
+  # corporate_local = also crawl Craigslist + SimplyHired for local/SMB roles
+  sourceMode: corporate
+
+  # A watchlist lists the companies it watches here. A keyword search can leave this empty.
+  # orgDomains: ["stripe.com", "notion.so"]
+  # useAts: true                        # default on: also pull each domain's Greenhouse/Lever/
+  #                                     # Ashby/SmartRecruiters/Personio/Workable/Recruitee board
+  # extraBoards: ["remoteok", "wwr"]    # opt-in free remote boards (keyword searches only)
+
+  # hiring.cafe filters, sent server-side 1:1. src/hiringcafeFilters.ts holds the exact
+  # vocabularies — an unknown value is rejected, never silently ignored.
+  # workplaceTypes: ["Remote"]
+  # commitmentTypes: ["Full Time"]
+  # seniorityLevels: ["Mid Level"]
+  # departments: ["Customer Service"]
+  # locations: []                       # structured places from the dashboard's location autocomplete
+
+# When to fetch. `schedule` is the full-control form the dashboard writes; `refreshCron` is the
+# older fixed-cron fallback and still works.
+refreshCron: "0 * * * *"
+# schedule:
+#   mode: interval                      # interval | recurring | once | cron
+#   every: 6
+#   unit: hour
+
+# Non-hiring sales signals, run over search.orgDomains after each fetch. Producer keys live in
+# src/signals; the live list is GET /api/signals/producers.
+# signals: ["velocity", "dns", "techstack", "edgar", "news"]
+
+company_signals:
+  min_open_roles: 2
+  flag_repeat_postings: true
+
+delivery:
+  # webhook_url: ${EXAMPLE_WEBHOOK}     # POSTs only NEW matches; ${ENV_VAR} is interpolated
+  mode: realtime                        # realtime | scheduled
+  # schedule: "0 9 * * *"               # scheduled mode only: when to send the digest
+
+# Optional: route signals to different webhooks by category (funding / layoffs / tooling / …),
+# falling back to delivery.webhook_url for anything unlisted.
+# signal_webhooks:
+#   funding: ${FUNDING_WEBHOOK}

@@ -1,0 +1,43 @@
+# The repo already had deterministic gates — typecheck, the unit tests, and a syntax check on the
+# 5k-line frontend — but nothing ran them unless someone remembered to. Every one of them is fast
+# and needs no secrets, no database and no network, so there is no reason not to run them on push.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # node:sqlite is used unflagged, which needs 22.5+. Pinning the major keeps CI honest
+          # about the floor the app actually requires.
+          node-version: "22"
+          cache: npm
+      # `npm ci` needs a lockfile; fall back to install so a lockfile-less checkout still runs.
+      - run: npm ci || npm install
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      # web/app.js ships as a plain script with no build step, so a syntax error would otherwise
+      # only surface in the browser. This is the cheapest possible guard against that.
+      - name: Frontend syntax
+        run: node --check web/app.js
+      # Boot on an isolated seeded database and confirm the server actually answers. Catches the
+      # class of failure the three checks above cannot: a migration that throws at startup.
+      - name: Boot smoke test
+        run: |
+          npx tsx start-test.mjs > /tmp/boot.log 2>&1 &
+          for i in $(seq 1 40); do
+            if curl -fsS -o /dev/null http://127.0.0.1:4055/api/ready; then break; fi
+            sleep 1
+          done
+          curl -fsS http://127.0.0.1:4055/api/ready
+          curl -fsS -o /dev/null -w 'health %{http_code}\n' http://127.0.0.1:4055/api/health
+          echo "--- server log ---"; cat /tmp/boot.log

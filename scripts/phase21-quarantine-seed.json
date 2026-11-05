@@ -1,0 +1,174 @@
+{
+  "_doc": "Phase 21 seed, generated from outputs/ats_reject_review_20261005.csv (WRONG_COMPANY rows only) plus hand-confirmed overrides. UNSURE rows are deliberately NOT quarantined.",
+  "quarantine": [
+    {
+      "domain": "appliedlabs.io",
+      "vendor": "ashby",
+      "slug": "appliedlabs",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: 'building the platform for reliable AI agents', in-person NYC. appliedlabs.io homepage: offshore engineering talent for SaaS startups (only Fibery contact is an innowise.com agency recruiter, consistent with that). appliedlabs.com is a pharma CMO, so the board belongs to a third company."
+    },
+    {
+      "domain": "arena.io",
+      "vendor": "ashby",
+      "slug": "arena",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: 'Arena Intelligence', AI model evaluation from Berkeley SkyLab, postings cite arena.ai, whose homepage is the LMArena leaderboard. arena.io's own homepage gives no description (title only), so medium confidence."
+    },
+    {
+      "domain": "atomic.supply",
+      "vendor": "ashby",
+      "slug": "atomic",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board is the Atomic venture studio ('Co-found with Atomic', 'Drug CMC Lead'), postings cite atomic.vc. atomic.supply sells supply-chain planning software."
+    },
+    {
+      "domain": "basis.ai",
+      "vendor": "lever",
+      "slug": "basis",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Basis ad-automation software for agencies (basis.com, homepage matches). basis.ai is Basis, a research institute building intelligence for science."
+    },
+    {
+      "domain": "baton.media",
+      "vendor": "greenhouse",
+      "slug": "baton",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Baton, Ryder's in-house supply-chain product group (baton.io). baton.media is 'the home for unreleased music'."
+    },
+    {
+      "domain": "bridgeinvest.io",
+      "vendor": "greenhouse",
+      "slug": "bridgeinvest",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: BridgeInvest, a Miami real-estate lending fund (bridgeinvest.com). bridgeinvest.io is Bridge, alternative-investment management software."
+    },
+    {
+      "domain": "clasp.com",
+      "vendor": "ashby",
+      "slug": "clasp",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Clasp, health-insurance benefits automation (founded 2023). clasp.com homepage: education-to-employment talent company; its real board is ashby:clasp-group, whose postings cite clasp.com. hiring.cafe's clasp.com rows mix BOTH boards, and today's Clasp emails cite this board's Product Engineer"
+    },
+    {
+      "domain": "confido.health",
+      "vendor": "ashby",
+      "slug": "confido",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Confido, AI infrastructure for CPG brands (postings cite confido.com). confido.health: AI assistants for healthcare. Rachel already disqualified the company."
+    },
+    {
+      "domain": "every.to",
+      "vendor": "personio",
+      "slug": "every",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Every. GmbH, a DACH food D2C company. every.to is an AI media/subscription company."
+    },
+    {
+      "domain": "gambit.security",
+      "vendor": "personio",
+      "slug": "gambit",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: GAMBIT, a German SAP consultancy (gambit.de redirects to gambit-group.com). gambit.security is an autonomous resilience security platform."
+    },
+    {
+      "domain": "harmonic.ai",
+      "vendor": "ashby",
+      "slug": "harmonic",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Harmonic, mathematical reasoning engine 'Aristotle' (harmonic.fun). harmonic.ai is a startup database; its own site links ashby:harmonic-ai."
+    },
+    {
+      "domain": "honeydew.ai",
+      "vendor": "ashby",
+      "slug": "honeydew",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Honeydew online dermatology (honeydew.com), remote dermatologist roles. honeydew.ai is a semantic layer for AI and BI."
+    },
+    {
+      "domain": "journey.live",
+      "vendor": "greenhouse",
+      "slug": "journey",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Journey.World design agency (architectural lighting designer etc.). journey.live is an employee mental-health platform."
+    },
+    {
+      "domain": "method.com",
+      "vendor": "ashby",
+      "slug": "method",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Method Financial (postings link methodfi.com). method.com is a design consultancy. Method Financial already exists as its own company (methodfi.com)."
+    },
+    {
+      "domain": "nomic.ai",
+      "vendor": "ashby",
+      "slug": "nomic",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Nomic, nELISA proteomics (nomic.bio). nomic.ai is AI for architecture/engineering/construction."
+    },
+    {
+      "domain": "onyx.security",
+      "vendor": "ashby",
+      "slug": "onyx",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Onyx open-source enterprise search (onyx.app). onyx.security is a secure AI control plane. Known namesake from CLAUDE.md."
+    },
+    {
+      "domain": "peek.us",
+      "vendor": "ashby",
+      "slug": "peek",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Peek, operating system for the experiences industry (peek.com). peek.us: AI search and leasing for multifamily."
+    },
+    {
+      "domain": "spacebar.fm",
+      "vendor": "smartrecruiters",
+      "slug": "spacebar",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: one Content Writer posting that cites spacebar.in (unreachable). spacebar.fm is 'Spacebar Memory'. Medium confidence."
+    },
+    {
+      "domain": "suno.tech",
+      "vendor": "ashby",
+      "slug": "suno",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: Suno AI music (suno.com). suno.tech: AI operating system for hearing-care clinics. 62 open jobs feeding a Pending company."
+    },
+    {
+      "domain": "tenex.co",
+      "vendor": "ashby",
+      "slug": "tenex",
+      "reason": "WRONG_COMPANY (ats_reject_review_20261005): Board: TENEX.AI managed detection & response (tenex.ai). tenex.co: AI transformation consultancy; its own site links ashby:tenexlabs."
+    }
+  ],
+  "overrides": [
+    {
+      "domain": "hightouch.com",
+      "vendor": "ashby",
+      "slug": "hightouch",
+      "note": "Confirmed same company 2026-10-05: postings cite hightouch.io, which redirects to hightouch.com"
+    },
+    {
+      "domain": "build.inc",
+      "vendor": "ashby",
+      "slug": "build",
+      "note": "Confirmed same company 2026-10-05: board describes agentic AI for institutional real estate, matching build.inc"
+    },
+    {
+      "domain": "dottxt.co",
+      "vendor": "ashby",
+      "slug": "dottxt",
+      "note": "Approved 2026-10-05: linked from dottxt.co's own site; postings cite dottxt.ai"
+    },
+    {
+      "domain": "joinpogo.com",
+      "vendor": "ashby",
+      "slug": "joinpogo",
+      "note": "Approved 2026-10-05: linked from joinpogo.com's own site; postings cite joinpogo.ai"
+    },
+    {
+      "domain": "arbiter.ai",
+      "vendor": "ashby",
+      "slug": "arbiter-ai",
+      "note": "Approved 2026-10-05: linked from arbiter.ai's own site; slug is not the stem"
+    }
+  ],
+  "left_alone_unsure": [
+    {
+      "domain": "artemissecurity.com",
+      "vendor": "ashby",
+      "slug": "artemis"
+    },
+    {
+      "domain": "buena.ai",
+      "vendor": "ashby",
+      "slug": "buena"
+    },
+    {
+      "domain": "method.com",
+      "vendor": "greenhouse",
+      "slug": "method"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+node_modules/
+dist/
+.env
+
+# data/ holds the user's own database and scratch files, so it is ignored by default. The two seed
+# lists below are the exception: they are the technology dictionary the detector needs, and without
+# them a fresh clone starts with ZERO technologies, which reads as "the feature is broken" rather
+# than "there is no data yet". `data/*` rather than `data/` so these negations can apply at all —
+# git does not descend into an ignored directory.
+data/*
+!data/technologies.csv
+!data/webappanalyzer.json
+
+# Watchlists are the user's own commercial targeting data (which companies they are going after).
+# Ignore the directory so a routine `git add -A` can never sweep a real one in; the starter example
+# stays tracked so a fresh clone still has something to copy.
+clients/*
+!clients/_example.yaml
+
+# A throwaway COPY of clients/ used by scripts/start-audit.mjs, so a UI sweep can exercise the client
+# editor's save / rename / DELETE paths without those writes landing on the real watchlists above.
+# src/config.ts guards CLIENTS_DIR with nothing — an audit instance MUST point somewhere else.
+clients-audit/
+
+*.log
+data/theirstack-technologies.csv
+.buggie/
+run.log
+
+# The UI-audit measurement probe, served from web/ so it can be re-injected after every reload with a
+# one-line fetch+eval. A local instrument, never part of the app. Removed at teardown.
+web/_audit-probe.js
+
+# Local-only files that must never be published.
+.env.*
+!.env.example
+_to_delete/
+*.bak*
+.playwright-browsers/
+*.plist
+debug_*.mts
+test_launch.mjs

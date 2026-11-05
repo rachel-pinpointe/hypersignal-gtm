@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HyperSignal-Hiring — Hiring Radar</title>
+<link rel="icon" type="image/svg+xml" href="logo.svg" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<a class="skip-link" href="#mainContent">Skip to content</a>
+<!-- Startup loading screen — covers the page until the backend reports ready (/api/ready) -->
+<div class="app-overlay" id="bootScreen">
+  <div class="ov-card">
+    <div class="ov-logo"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.1" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".38"/><path d="M12 12 L12 2.9 A9.1 9.1 0 0 1 20.1 7.9 Z" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/></svg></div>
+    <div class="ov-spin"></div>
+    <h2>Starting HyperSignal…</h2>
+    <p id="bootMsg">Loading your monitors, matches, and any paused tasks</p>
+  </div>
+</div>
+<!-- Shutdown loading screen -->
+<div class="app-overlay hidden" id="shutScreen" style="display:none">
+  <div class="ov-card">
+    <div class="ov-spin" id="shutSpin"></div>
+    <div class="ov-check" id="shutCheck" style="display:none"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h2 id="shutTitle">Shutting down…</h2>
+    <p id="shutMsg">Saving task progress and closing background processes</p>
+  </div>
+</div>
+<nav class="sidebar" id="sidebar">
+  <div class="side-top">
+    <div class="side-brand">
+      <div class="logo"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.1" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".38"/><path d="M12 12 L12 2.9 A9.1 9.1 0 0 1 20.1 7.9 Z" fill="currentColor"/><circle cx="12" cy="12" r="1.9" fill="currentColor"/></svg></div>
+      <div class="sb-name"><h1>HyperSignal</h1><p>Hiring signal radar <span class="ver" id="appVer">alpha</span></p></div>
+    </div>
+    <button class="side-collapse" id="sideCollapse" data-tip="Collapse sidebar" aria-label="Toggle sidebar">
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
+    </button>
+  </div>
+  <div class="side-nav">
+    <button class="side-item active" data-view="home" data-tip="Home — accounts to work">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
+      <span class="si-label">Home</span>
+    </button>
+    <button class="side-item" data-view="signals" data-tip="Signals">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.1.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/></svg></span>
+      <span class="si-label">Signals</span>
+    </button>
+    <div class="side-group-label">Set up &amp; data</div>
+    <button class="side-item" data-view="clients" data-tip="Monitors — keyword searches and watched account lists">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></span>
+      <span class="si-label">Monitors</span>
+    </button>
+    <button class="side-item" data-view="checking" data-tip="One-off checks">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1.5"/><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="m9 14 2 2 4-4"/></svg></span>
+      <span class="si-label">One-off checks</span>
+    </button>
+    <button class="side-item" data-view="admin" data-tip="Jobs database">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6a8 3 0 0 0 16 0V5"/><path d="M4 11v6a8 3 0 0 0 16 0v-6"/></svg></span>
+      <span class="si-label">Jobs database</span>
+    </button>
+    <button class="side-item" data-view="technologies" data-tip="Technologies">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></span>
+      <span class="si-label">Technologies</span>
+    </button>
+    <button class="side-item" data-view="system" data-tip="System">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg></span>
+      <span class="si-label">System</span>
+    </button>
+    <button class="side-item side-item-guide" data-view="guide" data-tip="Guide">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+      <span class="si-label">Guide</span>
+    </button>
+  </div>
+  <div class="side-foot">
+    <button class="side-mini" id="settingsBtn" data-tip="Settings">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>
+      <span class="si-label">Settings</span>
+    </button>
+    <button class="side-mini" id="helpBtn" data-tip="How it works">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1.1.9-1.1 1.7v.3"/><path d="M12 17h.01"/></svg></span>
+      <span class="si-label">How it works</span>
+    </button>
+    <button class="side-mini quit" id="quitBtn" data-tip="Save progress &amp; shut down">
+      <span class="si-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v10"/><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/></svg></span>
+      <span class="si-label">Shut down</span>
+    </button>
+  </div>
+</nav>
+
+<main class="main" id="mainContent" tabindex="-1">
+<section class="view" id="viewHome" hidden>
+  <!-- The old subtitle promised a ranking by "who's worth reaching out to", which the score does
+ not do: it is arithmetic over job POSTINGS only (open roles, roles posted in the last 14 days,
+ repeat listings) and ignores every sales signal — funding, layoffs, tool changes, all of it.
+ Say what it ranks by, and point at the column that carries the signals. -->
+  <div class="view-head"><h2>Home</h2><p class="view-sub">Every company you're tracking, ranked by hiring activity. Check <b>Why now</b> for the sales signals — those are not in the score.</p></div>
+  <div class="wrap">
+    <div class="home-bar">
+      <input type="search" id="homeSearch" placeholder="Search companies…" aria-label="Search companies" />
+      <div class="home-actions">
+        <button class="pill bulk-toggle" data-bulk-toggle="home" type="button" data-tip="Pick several companies and check all their sales signals in one run">
+          <svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Bulk check signals
+        </button>
+        <button class="linklike" id="homeResolve" data-tip="Auto-find websites for EVERY company missing one — across all pages, not just this one. Guessed from the name and verified against the site; found domains are marked 'auto'.">Resolve domains</button>
+        <div class="home-add-wrap">
+          <button class="btn primary" id="homeAddBtn" type="button" aria-haspopup="true" aria-expanded="false">+ Add companies</button>
+          <div class="home-add-menu" id="homeAddMenu" hidden role="menu">
+            <button type="button" data-add="keyword" role="menuitem"><b>Track by keyword</b><span>Find everyone hiring for a role</span></button>
+            <button type="button" data-add="watch" role="menuitem"><b>Watch a domain list</b><span>Monitor specific companies you name</span></button>
+            <button type="button" data-add="check" role="menuitem"><b>One-off check</b><span>Upload a list, snapshot who's hiring now</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tbl-scroll" id="homeScroll">
+      <table class="fixed-cols">
+        <colgroup>
+          <col style="width:230px"><col><col style="width:110px"><col style="width:96px"><col style="width:150px"><col style="width:92px">
+        </colgroup>
+        <thead><tr id="homeHead">
+          <th scope="col" data-sort="company">Company</th>
+          <th scope="col">Why now</th>
+          <th scope="col" data-sort="score" style="width:96px" data-tip="Hiring activity only: open roles x3, plus roles posted in the last 14 days x2, plus repeat listings x2. It does NOT include funding, layoffs, tool changes or any other sales signal — those are in the Why now column.">Hiring score</th>
+          <th scope="col" data-sort="openRoles" style="width:92px">Open roles</th>
+          <th scope="col" style="width:150px">Monitors</th>
+          <th scope="col" data-sort="lastSeen" style="width:92px">Last seen</th>
+        </tr></thead>
+        <tbody id="homeRows"><tr><td colspan="6" class="skel">Loading…</td></tr></tbody>
+      </table>
+      <div class="empty" id="homeEmpty" style="display:none">No companies tracked yet.<div class="empty-cta"><button class="btn primary" type="button" data-proxyclick="homeAddBtn">+ Add companies</button></div></div>
+    </div>
+    <div class="pager">
+      <span class="info" id="homePageInfo"></span>
+      <div class="ctrls"><button id="homePrev">‹ Prev</button><span class="page" id="homePageNum"></span><button id="homeNext">Next ›</button></div>
+    </div>
+  </div>
+</section>
+<section class="view" id="viewMonitor">
+  <div class="view-head"><h2 id="monitorTitle">Monitors</h2><p class="view-sub" id="monitorSub">Every tracker you're running — keyword searches and watched account lists — in one place.</p></div>
+  <div class="wrap">
+  <!-- One control bar: the search/watchlist picker, every quick filter, and the actions (Fetch · Edit · New),
+       all on a single wrapping line. Replaces the old horizontal tab strip (which grew unbounded with clients). -->
+  <div class="ctrlbar">
+    <label class="client-sel" data-tip="Choose which search or watchlist to view">
+      <span class="cs-ic"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></span>
+      <select id="clientSelect" aria-label="Search or watchlist"></select>
+    </label>
+    <div class="ms" id="msRemote">
+      <button class="pill ms-btn" id="msRemoteBtn">Remote: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="ms-panel" id="msRemotePanel"></div>
+    </div>
+    <select id="status" data-tip="Filter by whether the posting is still open">
+      <option value="">Open &amp; closed</option>
+      <option value="open">Open only</option>
+      <option value="closed">Closed only</option>
+    </select>
+    <select id="state"><option value="">All states</option></select>
+    <select id="since" data-tip="Filter by when the job was posted">
+      <option value="">Posted: any time</option>
+      <option value="1">Posted: 24 hours</option>
+      <option value="3">Posted: 3 days</option>
+      <option value="7">Posted: 7 days</option>
+      <option value="14">Posted: 14 days</option>
+      <option value="30">Posted: 30 days</option>
+    </select>
+    <div class="ms" id="msSeniority">
+      <button class="pill ms-btn" id="msSeniorityBtn">Seniority: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="ms-panel" id="msSeniorityPanel"></div>
+    </div>
+    <div class="ms" id="msTech">
+      <button class="pill ms-btn" id="msTechBtn">Technology: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="ms-panel ms-panel-tech" id="msTechPanel"></div>
+    </div>
+    <div class="ms" id="msSignal" data-tip="Filter to companies currently showing a sales signal (from monitoring or a signal check)">
+      <button class="pill ms-btn" id="msSignalBtn">Company signal: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="ms-panel" id="msSignalPanel"></div>
+    </div>
+    <input type="search" id="q" aria-label="Search matched jobs by role or company" placeholder="Search role or company…" />
+    <label class="check ftschk" data-tip="Fuzzy: matches word stems (manage→managing) and prefixes (salesf* → Salesforce); word-level so 'java' doesn't hit 'javascript'"><input type="checkbox" id="qFuzzy" /> Fuzzy</label>
+    <button class="pill" id="starFilter" data-tip="Show starred jobs only" aria-pressed="false"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 18.9 6.1 21.5l1.2-6.5L2.5 9.4l6.6-.9z"/></svg> Starred</button>
+    <button class="pill adv-btn" id="advBtn" data-scope="matches" data-tip="Build a deep AND/OR filter across any field">Advanced filter<span class="adv-badge" id="advBadge" hidden>0</span></button>
+    <div class="cb-actions">
+      <span class="nextfetch" id="nextFetch" style="display:none"></span>
+      <button class="pill fetch" id="fetchBtn" disabled>Fetch New Jobs</button>
+      <button class="pill stop-fetch" id="stopFetchBtn" hidden data-tip="Stop this fetch — the step in progress finishes, everything already found is kept, and the rest is skipped">Stop</button>
+      <button class="pill" id="editBtn">Edit</button>
+      <button class="pill primary" id="newBtn">+ New search</button>
+    </div>
+  </div>
+  <div class="setup" id="setup"></div>
+
+  <div class="help-banner hidden" id="helpBanner">
+    <div class="ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></div>
+    <div>
+      <h3>How HyperSignal works</h3>
+      <p>Each tab above is a saved monitor — it finds matching roles and lists them below. Nothing leaves your machine unless you add a webhook.</p>
+      <ul>
+        <li><b>Fetch New Jobs</b> pulls fresh postings now for the selected tab. It searches across all results, so it can take a few minutes. A 5-minute cooldown prevents over-running — you can override with a warning.</li>
+        <li><b>Posted</b> shows the age when it's available; some listings don't include one, shown as “—”. Use <b>Posted within</b> to filter by freshness.</li>
+        <li><b>Editing</b> a monitor and saving re-checks stored jobs against the new rules. <b>Deleting</b> one removes it and its matches; jobs other monitors still match are kept.</li>
+        <li><b>Webhook</b> (set per monitor) POSTs new matches to your URL in batches — never old/historical jobs, and never duplicates.</li>
+        <li><b>Settings</b> lets you auto-hide or delete jobs once they're old, and cap webhook batch size.</li>
+      </ul>
+    </div>
+    <button class="x" id="helpClose" data-tip="Dismiss" aria-label="Dismiss">&times;</button>
+  </div>
+
+  <div class="fetchwrap" id="fetchwrap">
+    <div class="progress">
+      <div class="top"><span class="status" id="fpStatus">Starting…</span><span class="nums" id="fpNums"></span></div>
+      <div class="bar"><div id="fpBar"></div></div>
+      <div class="fpcount" id="fpCount"></div>
+    </div>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="layout" id="monLayout">
+    <div class="panel hide-client" id="tablePanel">
+      <div class="panel-head">
+        <!-- A tablist whose children are plain buttons is an invalid ARIA structure: the active tab
+             is never exposed, and arrow-key navigation (which the pattern promises) does not exist.
+             Real roles + aria-selected + aria-controls, and roving tabindex wired in postTabHtml. -->
+        <div class="seg" id="postSeg" role="tablist" aria-label="Postings or companies">
+          <button type="button" role="tab" id="postTabPostings" data-tab="postings" class="active" aria-selected="true" aria-controls="tblScroll">Postings</button>
+          <button type="button" role="tab" id="postTabCompanies" data-tab="companies" aria-selected="false" aria-controls="coScroll" tabindex="-1">Companies</button>
+        </div>
+        <div class="ph-actions">
+          <button class="linklike" id="verifyBtn" data-tip="Re-check open postings' URLs; close any that return 404/gone">Verify open</button>
+          <button class="linklike" id="dedupeBtn" data-tip="Merge duplicate postings — the same role appearing more than once — into a single row">Remove duplicates</button>
+          <button class="linklike bulk-toggle" id="coBulk" data-bulk-toggle="companies" style="display:none" data-tip="Pick several companies and check all their sales signals in one run">Bulk check signals</button>
+          <button class="linklike" id="coResolve" style="display:none" data-tip="Auto-find websites for EVERY company missing one — across all pages, not just this one. Guessed from the name and verified against the site; found domains are marked 'auto'.">Resolve domains</button>
+          <button class="linklike" id="coExport" style="display:none" data-tip="Download every company in view as CSV">Export CSV</button>
+          <button class="linklike" id="coCopy" style="display:none" data-tip="Copy company + domain list to the clipboard">Copy list</button>
+          <!-- The postings tab's own export/copy. Companies had these and postings did not, so the list
+               you actually work in could not leave the app. Shown on the Postings tab only; the pair
+               above is the Companies-tab equivalent. -->
+          <button class="linklike" id="poExport" data-tip="Download every matched posting in view as CSV — the whole filtered set, not just this page">Export CSV</button>
+          <button class="linklike" id="poCopy" data-tip="Copy company + role + apply link for every posting in view to the clipboard">Copy list</button>
+          <button class="linklike" id="restoreBtn" style="display:none"></button>
+          <button class="linklike danger" id="hideOldBtn" style="display:none">Hide old…</button>
+          <span class="meta" id="resultMeta"></span>
+          <button class="pill cb-side-toggle" id="coSideToggle" type="button" aria-pressed="false" data-tip="Show or hide the Top hiring companies side panel">
+            <svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/></svg>
+            <span id="coSideToggleLbl">Companies panel</span>
+          </button>
+        </div>
+      </div>
+      <div class="tbl-scroll" id="tblScroll" role="tabpanel" aria-labelledby="postTabPostings">
+        <table class="fixed-cols post-tbl">
+          <!-- Same reasoning as the Jobs database: without explicit widths the browser sized columns to
+               content, so Role and Location wrapped and rows ranged 54px to 93px on one page. -->
+          <colgroup>
+            <col style="width:62px"><col style="width:120px"><col style="width:150px"><col style="width:170px">
+            <col style="width:200px"><col style="width:86px"><col style="width:130px"><col style="width:56px">
+            <col style="width:70px"><col style="width:74px"><col style="width:70px"><col style="width:64px">
+          </colgroup>
+          <thead><tr>
+            <th scope="col" class="col-triage"></th><th scope="col" class="col-client" data-msort="client">Client</th><th scope="col" data-msort="company">Company</th><th scope="col" data-msort="title">Role</th><th scope="col" class="jd-h" data-msort="description">Job description</th><th scope="col" data-msort="salary" data-tip="Highest stated salary on the posting, in the currency the posting used. Currencies are not converted, so sorting this column ranks the raw numbers: a large figure in rupees or yen outranks a smaller one in dollars. Filter by Salary currency in the advanced filter to compare like with like.">Salary</th><th scope="col" data-msort="location">Location</th><th scope="col" data-msort="state">State</th><th scope="col" data-msort="status">Status</th><th scope="col" data-msort="posted">Posted</th><th scope="col" data-msort="matched">Found</th><th scope="col" data-msort="reason" data-tip="Which of your keywords, technologies, or rules matched, and in which field (title, description, company, location).">What matched</th>
+          </tr></thead>
+          <tbody id="rows"><tr><td colspan="12" class="skel">Loading…</td></tr></tbody>
+        </table>
+        <div class="empty" id="empty" style="display:none">No matches for these filters.</div>
+      </div>
+      <div class="tbl-scroll" id="coScroll" role="tabpanel" aria-labelledby="postTabCompanies" style="display:none">
+        <table class="fixed-cols">
+          <colgroup>
+            <col style="width:200px"><col style="width:170px"><col style="width:86px"><col style="width:106px">
+            <col><col style="width:96px"><col style="width:88px">
+          </colgroup>
+          <thead><tr id="coHead">
+            <th scope="col" data-sort="company">Company</th><th scope="col" data-sort="domain">Domain</th><th scope="col" data-sort="openRoles">Open roles</th><th scope="col" data-sort="score" data-tip="Hiring activity only: open roles x3, plus roles posted in the last 14 days x2, plus repeat listings x2. Sales signals are not in it.">Hiring score</th><th scope="col" data-sort="monitors">Monitors</th><th scope="col" data-sort="salary">Max salary</th><th scope="col" data-sort="lastSeen">Last seen</th>
+          </tr></thead>
+          <tbody id="coRows"><tr><td colspan="7" class="skel">Loading…</td></tr></tbody>
+        </table>
+        <div class="empty" id="coEmpty" style="display:none">No companies in this view yet.</div>
+      </div>
+      <div class="pager">
+        <span class="info" id="pageInfo"></span>
+        <div class="ctrls">
+          <select id="pageSize"><option value="15">15 / page</option><option value="25">25 / page</option><option value="50">50 / page</option><option value="100">100 / page</option></select>
+          <button id="prev">‹ Prev</button><span class="page" id="pageNum"></span><button id="next">Next ›</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel" id="coSidePanel">
+      <div class="panel-head"><h2 id="companiesTitle">Top hiring companies</h2><span class="meta">by open roles</span></div>
+      <div id="companies"><div class="vempty">Loading…</div></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<div class="drawer-bg" id="drawerBg"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" inert>
+  <header>
+    <h2 id="drawerTitle">Edit client</h2>
+    <button class="x" id="drawerClose" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body">
+    <input type="text" id="fName" class="inline-title" placeholder="Name this tracker…" aria-label="Tracker name" />
+
+    <div class="sec">How often</div>
+    <div class="field">
+      <div class="hc-mode cadence" id="fCadence" role="group" aria-label="How often this tracker runs">
+        <button type="button" data-v="watch" class="active">Keep watching</button>
+        <button type="button" data-v="once">Check once</button>
+      </div>
+      <div class="hc-note" id="fCadenceNote"><b>Keep watching</b> re-checks on a schedule and alerts you when something new appears. <b>Check once</b> takes a single snapshot you can export — it needs at least one company domain below.</div>
+    </div>
+
+    <div class="sec">What you're looking for</div>
+    <div class="field">
+      <label>Job titles or keywords <span class="hint">one per line — matched anywhere in the posting, including the full job description</span></label>
+      <textarea id="fKeywords" rows="3" placeholder="customer service&#10;data entry&#10;virtual assistant"></textarea>
+      <div class="kw-opts">
+        <div class="hc-mode kw-scope" id="fKwScope" role="group" aria-label="Where keywords must appear">
+          <button type="button" data-v="anywhere" class="active">Anywhere</button>
+          <button type="button" data-v="title">Title only</button>
+          <button type="button" data-v="description">Description only</button>
+        </div>
+        <label class="check kw-exact"><input type="checkbox" id="fExactMatch" /> Exact matches only <button type="button" class="tip" aria-label="More information" data-tip="Off: a keyword matches from the start of a word, so &quot;react&quot; also finds &quot;ReactJS&quot;. On: only the whole word matches, so &quot;react&quot; finds &quot;React&quot; but not &quot;ReactJS&quot;, and &quot;java&quot; won't match &quot;JavaScript&quot;.">i</button></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Search depth <span class="hint">how many result pages to scan</span> <button type="button" class="tip" aria-label="More information" data-tip="All pages (default) scans every result page until a query runs out — most thorough. Balanced and Fast stop sooner for a quicker fetch. Applies to keyword searches and org-domain scans alike.">i</button></label>
+      <select id="fSearchDepth"><option value="deep">All pages (most thorough)</option><option value="standard">Balanced</option><option value="quick">Fast</option></select>
+    </div>
+    <div class="field" id="fScheduleField">
+      <label>Check for new jobs <span class="hint">when this tracker auto-fetches in the background</span></label>
+      <div class="sched" id="fSchedule"></div>
+    </div>
+    <!-- shared hiring.cafe filter panel (rendered by renderHcFilters) -->
+    <div id="fFilters"></div>
+
+    <div class="sec">Optional</div>
+    <div class="field">
+      <label>Monitor specific companies by domain <span class="hint">one bare domain per line — e.g. stripe.com · up to 10,000</span> <button type="button" class="tip" aria-label="More information" data-tip="Each company is looked up directly by its domain (no name guessing). Use bare domains like stripe.com (not https://www.stripe.com/careers) for the most accurate results. All of that company's openings are pulled, then filtered by your keywords/date/location. Runs alongside any keyword search above.">i</button></label>
+      <textarea id="fOrgDomains" rows="2" placeholder="stripe.com&#10;notion.so"></textarea>
+      <label class="check" style="margin-top:8px"><input type="checkbox" id="fUseAts" checked /> Also read each company's own job board <span class="hint">Greenhouse, Lever and Ashby — free, and carries full descriptions. <b>Slow to start:</b> every company is checked for a board before any job is fetched, at roughly 4 a second, so a few thousand companies means a long wait on the first run. Later runs reuse the result.</span> <button type="button" class="tip" aria-label="More information" data-tip="A company's own board is the best source there is — free, complete, and with the full job description. The cost is all up front: each company has to be probed once against every board vendor before the first job is fetched, at about 4 companies a second. 1,000 companies is about 4 minutes; 7,000 is closer to half an hour, and the counters read zero for all of it. The result is cached, so later runs skip it. Turn this off if you want results sooner and are happy with hiring.cafe's copy of the listings.">i</button></label>
+    </div>
+    <label class="check" style="margin-top:2px"><input type="checkbox" id="fIncludeOrg" /> Also include roles from companies I track elsewhere <button type="button" class="tip" aria-label="More information" data-tip="On: this search also matches roles at companies in your watchlists and account checks, not just the keyword results and domains above. Off (default): the search stays limited to what it fetches itself, so unrelated tracked companies don't bleed in.">i</button></label>
+    <div class="field">
+      <label>Also search free remote boards <span class="hint">extra coverage for remote roles</span> <button type="button" class="tip" aria-label="More information" data-tip="Pulls matching roles from RemoteOK and WeWorkRemotely (free public feeds) alongside hiring.cafe. Filtered by your keywords. Off by default.">i</button></label>
+      <div class="inline" style="gap:14px">
+        <label class="check"><input type="checkbox" id="fBoardRemoteok" /> RemoteOK</label>
+        <label class="check"><input type="checkbox" id="fBoardWwr" /> WeWorkRemotely</label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Exclude words <span class="hint">drop postings containing these</span></label>
+      <textarea id="fExclude" rows="2" placeholder="senior&#10;manager"></textarea>
+      <div class="kw-opts">
+        <div class="hc-mode kw-scope" id="fExcludeScope" role="group" aria-label="Where exclude words are checked">
+          <button type="button" data-v="anywhere" class="active">Anywhere</button>
+          <button type="button" data-v="title">Title only</button>
+          <button type="button" data-v="description">Description only</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Exclude companies <span class="hint">one per line — skip these employers</span></label>
+      <textarea id="fExcludeCompanies" rows="2" placeholder="Robert Half&#10;Randstad"></textarea>
+    </div>
+    <div class="field">
+      <label>Required technologies <span class="hint">only match postings that mention any of these (detected in the job text)</span></label>
+      <div class="tech-pick" id="fTechPicker"></div>
+    </div>
+    <div class="field">
+      <label>Advanced matching rules <span class="hint">optional — only match jobs that pass a precise rule (e.g. title contains "AE" and the description mentions Salesforce)</span></label>
+      <div class="mf-row">
+        <button type="button" class="btn ghost" id="fMatchFilterBtn">+ Add matching rules</button>
+        <button type="button" class="linklike danger" id="fMatchFilterClear" style="display:none">Clear</button>
+      </div>
+    </div>
+    <div class="sec">Signals to monitor <span class="hint">beyond job posts — checked after every fetch</span> <button type="button" class="tip" aria-label="More information" data-tip="Extra sales signals detected per watched company (hiring velocity, tech changes, …). New signals appear in the Signals view and POST to your webhook as event 'signals.new'. All free and local.">i</button></div>
+    <div class="field"><div class="chkrow" id="fSignals"><span class="hint">Loading signal types…</span></div></div>
+    <div class="field" id="fWebhookField">
+      <label>Notify me <span class="hint">webhook (Slack/Zapier) — blank = dashboard only</span> <button type="button" class="tip" aria-label="More information" data-tip="With a URL, new matches POST there in batches as they're found (never old/historical jobs, never duplicates). Use Test to send a sample.">i</button></label>
+      <div class="inline"><input type="url" id="fWebhook" placeholder="https://hooks.slack.com/…" /><button class="btn" id="testWebhook" type="button">Test</button></div>
+      <details class="wl-routes"><summary>Route specific signals elsewhere <span class="hint">optional — send some signal types to a different webhook</span></summary>
+        <div id="fSigRoutes"></div></details>
+    </div>
+    <label class="check" style="margin-top:8px"><input type="checkbox" id="fActive" checked /> Active — keep this search running</label>
+  </div>
+  <footer>
+    <button class="btn danger" id="deleteBtn" type="button">Delete</button>
+    <button class="btn ghost" id="cancelBtn" type="button">Cancel</button>
+    <button class="btn primary" id="saveBtn" type="button">Save</button>
+    <span class="msg" id="drawerMsg"></span>
+  </footer>
+</aside>
+
+<section class="view" id="viewChecking" hidden>
+  <div class="view-head"><h2 id="acTitle">One-off checks</h2><p class="view-sub">One-off snapshot — upload a list and see who's hiring right now. Saved &amp; exportable.</p></div>
+  <div class="wrap">
+
+    <!-- SCREEN: saved searches list -->
+    <div id="acScreenList">
+      <div class="ac-listbar">
+        <input type="search" id="acSearch" aria-label="Search saved account checks by name" placeholder="Search saved checks by name…" />
+        <button class="btn primary" id="acNewBtn" type="button">+ New check</button>
+      </div>
+      <div id="acSavedList" class="ac-saved"></div>
+    </div>
+
+    <!-- SCREEN: new check -->
+    <div id="acScreenNew" style="display:none">
+      <button type="button" class="ac-back" id="acNewBack"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Back to saved checks</button>
+
+      <input type="text" id="acName" class="inline-title" placeholder="Name this check…" aria-label="Check name" />
+
+      <div class="sec" id="acSecList">Company domains <button type="button" class="tip" aria-label="More information" data-tip="Upload normalized bare domains (e.g. stripe.com — not https://www.stripe.com/careers) for the most accurate results: that's the exact key hiring.cafe uses per company. We auto-clean scheme, www, paths and common job/careers subdomains, but one clean bare domain per row is safest.">i</button></div>
+      <div class="field">
+        <div class="ac-drop" id="acDrop"><svg aria-hidden="true" class="ac-drop-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg><div class="ac-drop-txt"><b>Drop a CSV here</b> or click to browse<span class="rnote">one bare domain per row — e.g. stripe.com</span></div></div>
+        <input type="file" id="acFile" aria-label="Upload a CSV of company domains" accept=".csv,text/csv,text/plain" style="display:none" />
+        <div id="acMapWrap" style="display:none; margin-top:10px">
+          <div class="grid2">
+            <div class="field" style="margin-bottom:0">
+              <label>Which column has the domain?</label>
+              <select id="acColumn"></select>
+            </div>
+            <div class="field" style="margin-bottom:0; display:flex; align-items:flex-end">
+              <label class="check"><input type="checkbox" id="acHeader" checked /> First row is a header</label>
+            </div>
+          </div>
+          <div class="ac-preview" id="acPreview"></div>
+        </div>
+        <textarea id="acNames" rows="3" aria-label="Company domains, one per line" placeholder="stripe.com&#10;notion.so&#10;shopify.com" style="display:none; margin-top:8px"></textarea>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px">
+          <span class="hint" id="acCount">No file selected</span>
+          <a class="src-add-link" id="acPasteToggle">or paste a list instead</a>
+        </div>
+      </div>
+
+      <div class="sec">Role &amp; filters</div>
+      <div class="field">
+        <label>Keywords <span class="hint">one per line — matched anywhere in the posting incl. the description; blank = any role</span></label>
+        <textarea id="acKeywords" rows="2" placeholder="customer support&#10;data entry"></textarea>
+        <div class="kw-opts">
+          <div class="hc-mode kw-scope" id="acKwScope" role="group" aria-label="Where keywords must appear">
+            <button type="button" data-v="anywhere" class="active">Anywhere</button>
+            <button type="button" data-v="title">Title only</button>
+            <button type="button" data-v="description">Description only</button>
+          </div>
+          <label class="check kw-exact"><input type="checkbox" id="acExactMatch" /> Exact matches only <button type="button" class="tip" aria-label="More information" data-tip="Off: &quot;react&quot; also finds &quot;ReactJS&quot;. On: only the whole word matches.">i</button></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Exclude words <span class="hint">drop postings containing these</span></label>
+        <textarea id="acExclude" rows="2" placeholder="senior&#10;manager"></textarea>
+      </div>
+      <div class="field">
+        <label>Required technologies <span class="hint">only surface companies with a posting that mentions any of these (detected in the job text)</span></label>
+        <div class="tech-pick" id="acTechPicker"></div>
+      </div>
+      <div class="hint" id="acDescNote" style="margin:-2px 0 2px">Full job descriptions are scraped for every matched role (one extra page fetch each).</div>
+      <!-- shared hiring.cafe filter panel (rendered by renderHcFilters) -->
+      <div id="acFilters"></div>
+
+      <div style="display:flex; gap:10px; align-items:center; margin-top:18px">
+        <button class="btn primary" id="acRun" type="button">Run check</button>
+        <span class="msg" id="acMsg"></span>
+      </div>
+    </div>
+
+    <!-- SCREEN: detail (params + live-building results) -->
+    <div id="acScreenDetail" style="display:none">
+      <button type="button" class="ac-back" id="acDetailBack"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Back to saved checks</button>
+      <div class="ac-detail-head">
+        <div><h3 id="acDName"></h3><span id="acDStatus"></span></div>
+        <div class="ac-detail-actions">
+          <button class="btn danger" id="acStop" type="button" style="display:none"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Stop</button>
+          <button class="btn" id="acDownload" type="button" style="display:none"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/><path d="M7 11l5 5 5-5"/><path d="M12 16V4"/></svg> Export CSV</button>
+          <button class="btn danger" id="acDelete" type="button">Delete</button>
+        </div>
+      </div>
+
+      <div class="sec">Search parameters</div>
+      <div id="acParams" class="ac-params"></div>
+
+      <div class="fetchwrap" id="acProgWrap" style="display:none;margin-top:14px">
+        <div class="progress">
+          <div class="top"><span class="status" id="acStatus">Starting…</span><span class="nums" id="acNums"></span></div>
+          <div class="bar"><div id="acBar"></div></div>
+        </div>
+      </div>
+
+      <div class="sec" style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <span>Results <span class="hint" id="acSummary"></span></span>
+        <button class="pill adv-btn" id="acAdvBtn" data-scope="checking" data-tip="Build a deep AND/OR filter across any field">Advanced filter<span class="adv-badge" id="acAdvBadge" hidden>0</span></button>
+      </div>
+      <div class="ac-results" id="acResults">
+        <table class="ac fixed-cols"><colgroup><col style="width:150px"><col style="width:160px"><col><col style="width:150px"><col><col style="width:72px"><col style="width:56px"></colgroup><thead id="acResHead"><tr><th scope="col" data-acsort="input_company">Your account</th><th scope="col" data-acsort="matched_company">Matched company</th><th scope="col" data-acsort="title">Role</th><th scope="col" data-acsort="location">Location</th><th scope="col" data-tip="Which of your keywords, technologies, or rules matched this opening, and in which field (title, description, company, location) — shown in context.">What matched</th><th scope="col" data-acsort="status">Status</th><th scope="col" data-acsort="url">Link</th></tr></thead><tbody id="acResultsBody"></tbody></table>
+        <div class="pager" id="acPager" hidden>
+          <span class="info" id="acPageInfo"></span>
+          <div class="ctrls"><button id="acPagePrev" type="button">‹ Prev</button><span class="page" id="acPageNum"></span><button id="acPageNext" type="button">Next ›</button></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="view" id="viewGuide" hidden>
+  <div class="view-head"><h2>Guide</h2><p class="view-sub">What every part of HyperSignal does, and what every signal means — in plain English.</p></div>
+  <div class="wrap">
+    <div class="g-intro">
+      <p><b>HyperSignal watches companies for buying signals.</b> It finds who's hiring (from public job boards) and layers on other signs a company is in motion — funding, tool changes, layoffs, launches — all from free public sources, so you reach out at the right moment.</p>
+    </div>
+
+    <div class="g-sec-title">The surfaces</div>
+    <div class="g-cards">
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg></span><b>Client Monitoring</b></div><p>Keyword-first. You describe roles (e.g. "customer support") and HyperSignal finds <i>everyone</i> hiring for them, anywhere. Use it to discover new companies you didn't know about.</p></div>
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg></span><b>Account Monitoring</b></div><p>Domain-first. You give a list of companies you already care about and HyperSignal watches <i>them</i> continuously — their hiring plus any signals you enable. Use it for named target accounts.</p></div>
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="3" width="8" height="4" rx="1.5"/><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="m9 14 2 2 4-4"/></svg></span><b>Account Checking</b></div><p>A one-off snapshot. Upload a CSV of domains, pick the signals to run, and get an instant "who's hiring / what's their current state" grid. Nothing repeats — it runs once and is saved for reference.</p></div>
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.1.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="m8 22 4-11 4 11"/></svg></span><b>Signals</b></div><p>The sales-signal feed beyond hiring. <b>Feed</b> shows changes over time (a company just raised, switched tools, launched). <b>Checks</b> runs a chosen set of signals on an uploaded list on demand.</p></div>
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6a8 3 0 0 0 16 0V5"/><path d="M4 11v6a8 3 0 0 0 16 0v-6"/></svg></span><b>Jobs database</b></div><p>Every raw job record HyperSignal has stored, across all monitors and checks. Search, filter, edit, or bulk-delete directly — the source data behind everything else.</p></div>
+      <div class="g-card"><div class="g-card-h"><span class="g-ico"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg></span><b>Technologies</b></div><p>Which tools each company's <b>job posts</b> mention — detected from the title and description of every matched posting. Browse the leaderboard, then drill into the companies using any given technology. This is <b>not</b> a read of their website: what a company's site actually runs is the separate <b>Website tech</b> signal, on the Signals page.</p></div>
+    </div>
+
+    <div class="g-sec-title">Signals explained</div>
+    <div class="g-note">A <b>signal</b> is a sign a company is in motion. Two ways they show up: as a <b>current-state flag</b> ("do they run ads right now?" — used to filter jobs & companies) and as a <b>feed event</b> ("they <i>just started</i> running ads" — a dated change vs the last scan). On a company's first scan, the 10 diff-based signals record a baseline and emit nothing, so you don't get a flood of old news. Four do fire immediately, by design, because each of their findings is a dated event rather than a change: hiring velocity, WARN layoff notices (which reach back 200 days), Product Hunt launches, and "app gone stale" — that last one is measured from the app's own current state, not from a diff. Every signal below is 100% free and public.</div>
+    <div class="g-search"><input type="search" id="guideSigSearch" placeholder="Filter signals — e.g. funding, ats, layoffs…" aria-label="Filter signals" /></div>
+    <div id="guideSignals" class="g-signals"></div>
+
+    <div class="g-sec-title">Fetch schedules</div>
+    <div class="g-note">Every monitor decides <b>when</b> it auto-fetches. Three modes:</div>
+    <ul class="g-list">
+      <li><b>Every…</b> — a simple interval: every 90 minutes, every 3 days, whatever number you type.</li>
+      <li><b>At set times</b> — specific time(s) of day on chosen days: 9:00 &amp; 17:00 on weekdays, the 1st of each month, etc.</li>
+      <li><b>Once</b> — a single run at an exact date &amp; time, then it's done.</li>
+    </ul>
+    <div class="g-note">The builder shows a live <b>"Next run"</b> so you always know when it'll fire next.</div>
+
+    <div class="g-sec-title">Webhooks &amp; delivery</div>
+    <div class="g-note">A monitor can POST new matches and signals to a URL you set (Zapier, Make, your own endpoint). <b>Realtime</b> sends each batch as it's found; <b>scheduled</b> batches them into a digest. You can also route specific signal families to different webhooks. Only <b>new</b> events are sent — never old jobs, never duplicates.</div>
+
+    <div class="g-sec-title">Glossary</div>
+    <div class="g-gloss" id="guideGlossary"></div>
+  </div>
+</section>
+
+<section class="view" id="viewAdmin" hidden>
+  <div class="view-head"><h2>Jobs database</h2><p class="view-sub">View, edit, and delete raw job records directly. Account-checked companies' openings are saved here too.</p></div>
+  <div class="wrap">
+    <div class="toolbar">
+      <input type="search" id="admQ" aria-label="Search the jobs database by role, company, domain or URL" placeholder="Search role / company / domain / URL…" />
+      <label class="check ftschk" data-tip="Fuzzy: matches word stems + prefixes, word-level"><input type="checkbox" id="admFuzzy" /> Fuzzy</label>
+      <select id="admSource"><option value="">All sources</option><option value="hiringcafe">Companies</option><option value="hcorg">Account / domain</option><option value="craigslist">Craigslist</option><option value="simplyhired">SimplyHired</option></select>
+      <select id="admStatus"><option value="">Open &amp; closed</option><option value="open">Open only</option><option value="closed">Closed only</option></select>
+      <select id="admMatches"><option value="">Matched &amp; unmatched</option><option value="yes">Matched only</option><option value="no">Unmatched only</option></select>
+      <select id="admSince"><option value="">Posted: any time</option><option value="7">Posted: 7 days</option><option value="30">Posted: 30 days</option><option value="90">Posted: 90 days</option></select>
+      <select id="admMonitor" data-tip="Show only jobs produced by a specific search or watchlist — to isolate a bad run"><option value="">Matched by: any monitor</option></select>
+      <select id="admHasDesc" data-tip="Filter by whether the job has a description"><option value="">Description: any</option><option value="yes">Has description</option><option value="no">No description</option></select>
+      <div class="ms" id="msAdmSeniority">
+        <button class="pill ms-btn" id="msAdmSeniorityBtn">Seniority: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+        <div class="ms-panel" id="msAdmSeniorityPanel"></div>
+      </div>
+      <div class="ms" id="msAdmTech">
+        <button class="pill ms-btn" id="msAdmTechBtn">Technology: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+        <div class="ms-panel ms-panel-tech" id="msAdmTechPanel"></div>
+      </div>
+      <div class="ms" id="msAdmSignal" data-tip="Filter to companies currently showing a sales signal">
+        <button class="pill ms-btn" id="msAdmSignalBtn">Company signal: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+        <div class="ms-panel" id="msAdmSignalPanel"></div>
+      </div>
+      <button class="pill adv-btn" id="admAdvBtn" data-scope="admin" data-tip="Build a deep AND/OR filter across any field">Advanced filter<span class="adv-badge" id="admAdvBadge" hidden>0</span></button>
+    </div>
+    <div class="adm-bulkbar">
+      <label class="check"><input type="checkbox" id="admSelAll" /> Select page</label>
+      <span class="meta" id="admSelCount"></span>
+      <div class="vbtns">
+        <button class="pill" id="admExport">Export CSV</button>
+        <button class="pill" id="admBulkOpen">Mark open</button>
+        <button class="pill" id="admBulkClosed">Mark closed</button>
+        <button class="pill danger-pill" id="admBulkDelSel">Delete selected</button>
+        <button class="pill danger-pill" id="admBulkDelAll">Delete all matching</button>
+      </div>
+    </div>
+    <div class="layout" style="grid-template-columns:1fr">
+      <div class="panel">
+        <div class="panel-head"><h2>Job records</h2><span class="meta" id="admMeta"></span></div>
+        <div class="tbl-scroll" id="admScroll">
+          <table class="fixed-cols adm-tbl">
+            <!-- Explicit widths, honoured because the table is `table-layout: fixed`. Without them the
+                 browser sized every column to its content, squeezing Role to 88px and Location to 94px
+                 so both wrapped to 4 lines — rows ranged 70px to 151px on a single page. -->
+            <colgroup>
+              <col style="width:34px"><col style="width:140px"><col style="width:165px"><col style="width:195px">
+              <col style="width:76px"><col style="width:126px"><col style="width:64px"><col style="width:92px">
+              <col style="width:74px"><col style="width:300px"><col style="width:72px"><col style="width:92px">
+            </colgroup>
+            <thead><tr>
+              <th scope="col"></th><th scope="col" data-asort="company">Company</th><th scope="col" data-asort="title">Role</th><th scope="col" class="jd-h" data-asort="description">Job description</th><th scope="col" data-asort="salary" data-tip="Highest stated salary on the posting, in the currency the posting used. Currencies are not converted, so sorting this column ranks the raw numbers: a large figure in rupees or yen outranks a smaller one in dollars. Filter by Salary currency in the advanced filter to compare like with like.">Salary</th><th scope="col" data-asort="location">Location</th><th scope="col" data-asort="status">Status</th><th scope="col" data-asort="source">Source</th><th scope="col" data-asort="matches">Matches</th><th scope="col" data-tip="Where your search hit each job, shown in context in the job's own text. When you filter (search box, technology, or advanced filter), it highlights those terms; otherwise it shows what a monitor matched.">What matched</th><th scope="col" data-asort="posted">Posted</th><th scope="col">Actions</th>
+            </tr></thead>
+            <tbody id="admRows"><tr><td colspan="12" class="skel">Loading…</td></tr></tbody>
+          </table>
+          <div class="empty" id="admEmpty" style="display:none">No job records match these filters.</div>
+        </div>
+        <div class="pager">
+          <span class="info" id="admPageInfo"></span>
+          <div class="ctrls">
+            <select id="admPageSize"><option value="15">15 / page</option><option value="25">25 / page</option><option value="50">50 / page</option><option value="100">100 / page</option></select>
+            <button id="admPrev">‹ Prev</button><span class="page" id="admPageNum"></span><button id="admNext">Next ›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="viewSystem" hidden>
+  <div class="view-head"><h2>System</h2><p class="view-sub">Live health, fetch speed, and the history of every fetch and account check.</p></div>
+  <div id="sysHealth" class="sys-strip"></div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-head">
+      <h2>Top technologies</h2>
+      <div class="seg2" id="techLbScope">
+        <button type="button" data-v="search" class="active">Client monitoring</button>
+        <button type="button" data-v="watchlist">Account monitoring</button>
+      </div>
+    </div>
+    <div class="guide" style="margin:0 14px 10px">Which technologies appear most across matched postings in scope — a read on demand and hiring intent. Detected from each job's title and description against the technology dictionary.</div>
+    <div id="techLb" class="tech-lb"><div class="skel" style="padding:14px">Loading…</div></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <div class="panel-head"><h2>Fetch history</h2><span class="meta" id="runsMeta"></span></div>
+    <div class="tbl-scroll">
+      <table class="fixed-cols">
+        <colgroup>
+          <col style="width:130px"><col><col style="width:110px"><col style="width:84px">
+          <col style="width:70px"><col style="width:84px"><col style="width:74px"><col style="width:150px">
+        </colgroup>
+        <thead><tr>
+          <th scope="col" data-rsort="started_at">When</th><th scope="col" data-rsort="client">Source</th><th scope="col" data-rsort="type">Type</th><th scope="col" data-rsort="fetched">Fetched</th><th scope="col" data-rsort="fresh">New</th><th scope="col" data-rsort="matched">Matched</th><th scope="col" data-rsort="took">Took</th><th scope="col" data-rsort="result">Result</th>
+        </tr></thead>
+        <tbody id="runsRows"><tr><td colspan="8" class="skel">Loading…</td></tr></tbody>
+      </table>
+      <div class="empty" id="runsEmpty" style="display:none">No fetches yet.<div class="empty-cta"><button class="btn" type="button" data-goview="clients">Open Client Monitoring</button><button class="btn" type="button" data-goview="accounts">Open Account Monitoring</button></div></div>
+    </div>
+    <div class="pager">
+      <span class="info" id="runsPageInfo"></span>
+      <div class="ctrls"><button id="runsPrev">‹ Prev</button><span class="page" id="runsPageNum"></span><button id="runsNext">Next ›</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="viewSignals" hidden>
+  <div class="view-head">
+    <h2>Signals</h2>
+    <p class="view-sub">Sales signals beyond job posts — hiring velocity, tech changes, and more, per watched company.</p>
+  </div>
+  <div class="wrap">
+    <!-- Single control line: view picker (Feed/Checks) + monitor + filters + search, like every other page -->
+    <div class="ctrlbar">
+      <label class="client-sel" data-tip="Feed or Checks">
+        <span class="cs-ic"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.9 16.1C1 12.2 1 5.8 4.9 1.9"/><path d="M7.8 4.7a6.14 6.14 0 0 0-.8 7.5"/><circle cx="12" cy="9" r="2"/><path d="M16.2 4.8c2 2 2.26 5.1.8 7.47"/><path d="M19.1 1.9a9.96 9.96 0 0 1 0 14.1"/><path d="M9.5 18h5"/><path d="m8 22 4-11 4 11"/></svg></span>
+        <select id="sigTabSel" aria-label="Signals view"><option value="feed">Feed</option><option value="sigco">Companies</option><option value="checks">Checks</option></select>
+      </label>
+      <!-- feed-only filters (hidden on the Checks view) -->
+      <span id="sigFeedControls" style="display:contents">
+        <select id="sigClient" class="sig-monitor" aria-label="Monitor" data-tip="Scope to one monitor"></select>
+        <div class="ms" id="msSigCat">
+          <button class="pill ms-btn" id="msSigCatBtn" data-tip="What the signal MEANS — e.g. Funding covers a US SEC filing, a UK Companies House filing and press reports, all in one place.">Category: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="ms-panel" id="msSigCatPanel"></div>
+        </div>
+        <div class="ms" id="msSigType">
+          <button class="pill ms-btn" id="msSigTypeBtn" data-tip="The exact signal, i.e. which source found it. Narrower than Category.">Signal: any <span class="caret"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+          <div class="ms-panel" id="msSigTypePanel"></div>
+        </div>
+        <select id="sigWhen" class="sig-monitor" aria-label="When" data-tip="Filter by when the signal happened (the event date, e.g. the funding filing date)">
+          <option value="">Any time</option>
+          <option value="30">Last 30 days</option>
+          <option value="90">Last 3 months</option>
+          <option value="180">Last 6 months</option>
+          <option value="365">Last 12 months</option>
+          <option value="730">Last 2 years</option>
+        </select>
+        <input type="search" id="sigQ" aria-label="Search signals by company, domain or signal" placeholder="Search company, domain, or signal…" />
+        <label class="sig-histtog" data-tip="When several sources report the SAME event (a raise found in an SEC filing, a UK filing and two articles), show it as one row with the strongest evidence first. Turn off to see every report separately. Webhooks always deliver each signal individually."><input type="checkbox" id="sigGroup" checked /> Group similar</label>
+        <label class="sig-histtog" data-tip="Include signals you've dismissed — keeps the full historical record searchable"><input type="checkbox" id="sigHistory" /> All history</label>
+        <span class="cb-actions">
+          <button class="pill" id="sigExport" type="button" data-tip="Download every signal matching the current filters as a CSV — not just this page">Export CSV</button>
+          <button class="pill" id="sigCopy" type="button" data-tip="Copy every signal matching the current filters to the clipboard, ready to paste into a sheet">Copy</button>
+          <button class="pill primary" id="sigScanBtn" style="display:none">Scan now</button>
+        </span>
+      </span>
+    </div>
+
+    <!-- SUB-TAB: live signal feed (continuous monitoring) -->
+    <div id="sigTabFeed">
+    <div class="stats" id="sigStats"></div>
+    <!-- Per-signal-type breakdown: one clickable cell per signal type found (label · 24h · count) -->
+    <div class="sig-breakdown" id="sigBreakdown" style="display:none"></div>
+    <div class="panel">
+      <div class="panel-head"><h2>Signal feed</h2><span class="meta" id="sigMeta"></span></div>
+      <div class="sig-fallback-note" id="sigFallbackNote" style="display:none"></div>
+      <div class="tbl-scroll">
+        <table class="fixed-cols">
+          <colgroup>
+            <col style="width:90px"><col style="width:190px"><col style="width:150px"><col><col style="width:96px"><col style="width:56px">
+          </colgroup>
+          <thead id="sigHead"><tr>
+            <th scope="col" style="width:90px" data-sigsort="when">When</th><th scope="col" data-sigsort="company">Company</th><th scope="col" style="width:150px" data-sigsort="signal">Signal</th><th scope="col" data-sigsort="what">What happened</th><th scope="col" style="width:60px" data-sigsort="monitor">Monitor</th><th scope="col" style="width:56px"></th>
+          </tr></thead>
+          <tbody id="sigRows"><tr><td colspan="6" class="skel">Loading…</td></tr></tbody>
+        </table>
+        <div class="empty" id="sigEmpty" style="display:none">
+          No signals yet. Turn signal types on for a watchlist, then fetch — or run a one-off check.
+          <div class="empty-cta"><button class="btn" type="button" data-goview="accounts">Open Account Monitoring</button><button class="btn" type="button" data-gosigtab="checks">Run a check</button></div>
+        </div>
+      </div>
+      <div class="pager">
+        <span class="info" id="sigPageInfo"></span>
+        <div class="ctrls"><button id="sigPrev">‹ Prev</button><span class="page" id="sigPageNum"></span><button id="sigNext">Next ›</button></div>
+      </div>
+    </div>
+    </div>
+
+    <!-- SUB-TAB: one-off multi-signal checks on an uploaded domain list -->
+    <div id="sigTabChecks" style="display:none">
+      <!-- SCREEN: saved checks -->
+      <div id="scScreenList">
+        <!-- Quick single-domain check: run every producer on one company right now (no saved check). -->
+        <div class="sig-quickcheck">
+          <input type="text" id="sigQuickDomain" placeholder="Check one company now — e.g. stripe.com" aria-label="Domain to check" />
+          <button class="btn primary" id="sigQuickBtn" type="button">Check now</button>
+        </div>
+        <div class="ac-listbar">
+          <input type="search" id="scSearch" aria-label="Search saved signal checks by name" placeholder="Search saved signal checks by name…" />
+          <button class="btn primary" id="scNewBtn" type="button">+ New signal check</button>
+        </div>
+        <div id="scSavedList" class="ac-saved"></div>
+      </div>
+
+      <!-- SCREEN: new check -->
+      <div id="scScreenNew" style="display:none">
+        <button type="button" class="ac-back" id="scNewBack"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Back to saved checks</button>
+        <input type="text" id="scName" class="inline-title" placeholder="Name this signal check…" aria-label="Check name" />
+
+        <div class="sec">Company domains <button type="button" class="tip" aria-label="More information" data-tip="One bare domain per row (e.g. stripe.com). Scheme, www and paths are auto-cleaned; duplicates collapse.">i</button></div>
+        <div class="field">
+          <div class="ac-drop" id="scDrop"><svg aria-hidden="true" class="ac-drop-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M17 8l-5-5-5 5"/><path d="M12 3v12"/></svg><div class="ac-drop-txt"><b>Drop a CSV here</b> or click to browse<span class="rnote">we auto-pick the domain/website column</span></div></div>
+          <input type="file" id="scFile" aria-label="Upload a CSV of company domains" accept=".csv,text/csv,text/plain" style="display:none" />
+          <textarea id="scDomains" rows="5" aria-label="Company domains, one per line" placeholder="stripe.com&#10;notion.so&#10;acme.io" style="margin-top:8px"></textarea>
+          <div class="hint" id="scCount" style="margin-top:6px">No domains yet</div>
+        </div>
+
+        <div class="sec">Signals to check <span class="hint">all selected signals run per domain</span></div>
+        <div class="field"><div class="chkrow" id="scSignals"><span class="hint">Loading signal types…</span></div></div>
+        <!-- Per-run Meta Ad Library region, rendered by app.js and shown only while "Meta ad
+             activity" is ticked. Sits with the signal it belongs to; Settings holds the default. -->
+        <div class="field sc-adregion" id="scAdRegion" style="display:none"></div>
+
+        <div class="sec">Deliver <span class="hint">optional — POST every signal found to a webhook (Slack/Zapier/CRM)</span></div>
+        <div class="field"><input type="url" id="scWebhook" aria-label="Webhook URL for this signal check" placeholder="https://hooks.example.com/… (blank = dashboard + CSV only)" style="width:100%" /></div>
+
+        <div style="display:flex; gap:10px; align-items:center; margin-top:18px">
+          <button class="btn primary" id="scRun" type="button">Run check</button>
+          <span class="msg" id="scMsg"></span>
+        </div>
+      </div>
+
+      <!-- SCREEN: detail (params + live-building results grid) -->
+      <div id="scScreenDetail" style="display:none">
+        <button type="button" class="ac-back" id="scDetailBack"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg> Back to saved checks</button>
+        <div class="ac-detail-head">
+          <div><h3 id="scDName"></h3><span id="scDStatus"></span></div>
+          <div class="ac-detail-actions">
+            <button class="btn danger" id="scStop" type="button" style="display:none"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Stop</button>
+            <button class="btn" id="scDownload" type="button" style="display:none"><svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3"/><path d="M7 11l5 5 5-5"/><path d="M12 16V4"/></svg> Export CSV</button>
+            <button class="btn danger" id="scDelete" type="button">Delete</button>
+          </div>
+        </div>
+        <div class="sec">Check parameters</div>
+        <div id="scParams" class="ac-params"></div>
+        <div class="fetchwrap" id="scProgWrap" style="display:none;margin-top:14px">
+          <div class="progress">
+            <div class="top"><span class="status" id="scStatus">Starting…</span><span class="nums" id="scNums"></span></div>
+            <div class="bar"><div id="scBar"></div></div>
+          </div>
+        </div>
+        <div class="sec">Results <span class="hint" id="scSummary"></span></div>
+        <!-- Ranking the result set is the whole point of a 200-domain check: without these the only
+             way to answer "who is worth calling this week" was to export the CSV and sort it in a
+             spreadsheet. Filtering is client-side because the whole result set is already loaded. -->
+        <div class="ctrlbar sc-filters">
+          <input type="search" id="scFilterQ" placeholder="Filter by domain or name…" aria-label="Filter results by domain or company name" />
+          <select id="scFilterHas" aria-label="Filter results by signals found" data-tip="Narrow the grid to the domains worth acting on">
+            <option value="">All domains</option>
+            <option value="yes">With signals</option>
+            <option value="no">No signals</option>
+            <option value="err">Had errors</option>
+          </select>
+          <button class="btn ghost" id="scFilterClear" type="button" data-tip="Clear the filter and show every checked domain">Clear</button>
+        </div>
+        <div class="ac-results" id="scResults">
+          <table class="ac"><thead id="scHead"></thead><tbody id="scBody"></tbody></table>
+        </div>
+        <div class="pager">
+          <span class="info" id="scPageInfo"></span>
+          <div class="ctrls"><button id="scPagePrev">‹ Prev</button><span class="page" id="scPageNum"></span><button id="scPageNext">Next ›</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUB-TAB: companies list — pick a batch, run one signal check across all of them -->
+    <div id="sigTabCompanies" style="display:none">
+      <div class="home-bar">
+        <input type="search" id="sigcoSearch" placeholder="Search companies…" aria-label="Search companies" />
+        <div class="home-actions">
+          <button class="pill bulk-toggle" data-bulk-toggle="sigco" type="button" data-tip="Pick several companies and check all their sales signals in one run">
+            <svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Bulk check signals
+          </button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr id="sigcoHead">
+            <th scope="col" data-sort="company">Company</th>
+            <th scope="col">Why now</th>
+            <th scope="col" data-sort="score" style="width:96px" data-tip="Hiring activity only: open roles x3, plus roles posted in the last 14 days x2, plus repeat listings x2. Sales signals are not in it.">Hiring score</th>
+            <th scope="col" data-sort="openRoles" style="width:92px">Open roles</th>
+            <th scope="col" data-sort="lastSeen" style="width:92px">Last seen</th>
+          </tr></thead>
+          <tbody id="sigcoRows"><tr><td colspan="5" class="skel">Loading…</td></tr></tbody>
+        </table>
+        <div class="empty" id="sigcoEmpty" style="display:none">No companies tracked yet.<div class="empty-cta"><button class="btn primary" type="button" data-goview="home">Go to Home to add companies</button></div></div>
+      </div>
+      <div class="pager">
+        <span class="info" id="sigcoPageInfo"></span>
+        <div class="ctrls"><button id="sigcoPrev">‹ Prev</button><span class="page" id="sigcoPageNum"></span><button id="sigcoNext">Next ›</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="viewTechnologies" hidden>
+  <div class="view-head">
+    <h2>Technologies</h2>
+    <p class="view-sub">Technologies mentioned in the <b>text of the job ads</b> you've matched — a read on what companies are hiring for. Search the dictionary, see what comes up most, and jump to every job using one. (Looking for what a company's <b>website</b> actually runs? That's the <b>Website tech</b> signal on the Signals page.)</p>
+  </div>
+  <div class="wrap">
+  <div class="tech-grid no-side" id="techGrid">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Browse the dictionary</h2>
+        <div class="ph-actions">
+          <span class="meta" id="techViewCount">—</span>
+          <button class="pill cb-side-toggle" id="techLbToggle" type="button" aria-pressed="false" data-tip="Show or hide the Top-in-your-postings side panel">
+            <svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3-4 3 2 4-6"/></svg>
+            <span id="techLbToggleLbl">Top technologies</span>
+          </button>
+        </div>
+      </div>
+      <div class="tech-search-wrap">
+        <input type="search" id="techViewSearch" aria-label="Search technologies" placeholder="Search technologies — e.g. React, Kubernetes, Salesforce…" autocomplete="off" />
+        <div class="guide" id="techViewGuide" style="margin:8px 0 0">The most widely-adopted technologies are listed below. Click any row to see every job in your database that mentions it.</div>
+      </div>
+      <div class="tbl-scroll tech-tbl-scroll">
+        <table class="tech-tbl">
+          <thead id="techHead"><tr><th scope="col" data-techsort="name">Technology</th><th scope="col" data-techsort="category">Category</th></tr></thead>
+          <tbody id="techViewRows"></tbody>
+        </table>
+      </div>
+      <div class="pager tech-pager" id="techPager" style="display:none">
+        <span class="info" id="techPageInfo"></span>
+        <div class="ctrls"><select id="techPageSize"><option value="15">15 / page</option><option value="25">25 / page</option><option value="50">50 / page</option><option value="100">100 / page</option></select><button id="techPrev">‹ Prev</button><span class="page" id="techPageNum"></span><button id="techNext">Next ›</button></div>
+      </div>
+    </div>
+    <div class="panel" id="techLbPanel">
+      <div class="panel-head">
+        <h2>Top in your postings</h2>
+        <div class="seg2" id="techViewScope">
+          <button type="button" data-v="search" class="active">Client</button>
+          <button type="button" data-v="watchlist">Account</button>
+        </div>
+      </div>
+      <div class="guide" style="margin:0 14px 8px">Most-mentioned technologies across your matched postings in scope. Click one to drill in.</div>
+      <div id="techViewLb" class="tech-lb"><div class="skel" style="padding:14px">Loading…</div></div>
+    </div>
+  </div>
+  </div>
+</section>
+</main>
+
+<!-- Active-fetches dock: a top-right indicator of fetches running in OTHER views. A fetch shows its big
+     progress bar only in its own view/tab; from anywhere you can watch any in-progress fetch here and
+     click through to it. Hidden when nothing is running. -->
+<div class="fetch-dock" id="fetchDock" hidden>
+  <button class="fd-btn" id="fdBtn" type="button" data-tip="Fetches in progress">
+    <span class="fd-spin"></span>
+    <span class="fd-label" id="fdLabel">0 fetches running</span>
+    <svg aria-hidden="true" class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+  </button>
+  <div class="fd-panel" id="fdPanel" hidden>
+    <div class="fd-head">Active fetches</div>
+    <div class="fd-list" id="fdList"></div>
+  </div>
+</div>
+
+<div class="drawer-bg" id="settingsBg"></div>
+<aside class="drawer" id="settingsDrawer" aria-hidden="true" inert>
+  <header>
+    <h2>Settings</h2>
+    <button class="x" id="settingsCloseX" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body">
+    <div class="sec">Fetch speed</div>
+    <div class="field">
+      <label>How fast to pull jobs <button type="button" class="tip" aria-label="More information" data-tip="Scales how many pages HyperSignal fetches at once from your own IP. It always adapts down automatically if the source pushes back — 'Aggressive' just aims higher. No proxies, no cost, ever.">i</button></label>
+      <div class="seg2" id="setSpeed">
+        <button type="button" data-v="gentle">Gentle</button>
+        <button type="button" data-v="normal" class="active">Normal</button>
+        <button type="button" data-v="aggressive">Aggressive</button>
+      </div>
+      <div class="guide" id="speedGuide"></div>
+    </div>
+
+    <div class="sec">Notifications</div>
+    <div class="field">
+      <label class="check"><input type="checkbox" id="setNotify" /> Desktop notification when a fetch finds new matches <button type="button" class="tip" aria-label="More information" data-tip="A free browser notification pops up when a background fetch lands new matches and you're on another tab or app. Nothing is sent anywhere.">i</button></label>
+      <div class="guide" id="notifyGuide"></div>
+    </div>
+
+    <div class="sec">When I close the window</div>
+    <div class="field">
+      <label class="check"><input type="checkbox" id="setAutoQuit" /> Quit the app when I close this window <button type="button" class="tip" aria-label="More information" data-tip="On: closing the last dashboard tab shuts the app down a few seconds later (a reload or a second open tab won't stop it). Off: the app keeps running in the background and keeps collecting signals until you use Stop Signal Engine.">i</button></label>
+      <div class="guide" id="autoQuitGuide"></div>
+    </div>
+
+    <div class="sec">Company websites</div>
+    <div class="field">
+      <label class="check"><input type="checkbox" id="setAutoResolve" /> Auto-find missing websites after each fetch <button type="button" class="tip" aria-label="More information" data-tip="After every fetch, quietly looks up websites for a small batch of companies that don't have one yet (guessed from the name, verified against the site). Companies it can't find are retried a week later. Turn off if you'd rather resolve manually with the 'Resolve domains' button.">i</button></label>
+      <div class="guide">Websites unlock signal checks and the "why now" chips. You can also run <b>Resolve domains</b> on Home at any time — it works through every company missing one.</div>
+    </div>
+
+    <div class="sec">Meta ads region</div>
+    <div class="field">
+      <label>Where to look for ads <button type="button" class="tip" aria-label="More information" data-tip="Which region of the Meta Ad Library the 'Running Meta ads' signal searches. Worldwide finds ads no matter which country they run in — a German or Indian advertiser looks like an advertiser. Pick a single country only if you specifically care about ads in that market; a company with no ads there will then be reported as 'not checked elsewhere' rather than 'no ads', because we can't see the rest of the world.">i</button></label>
+      <!-- Options are filled from /api/signals/ad-regions so this and the per-check picker on the
+           Signal Checks screen always offer exactly the same list. -->
+      <select id="setAdCountry"></select>
+      <div class="guide">This is the <b>default</b> — any single Signal Check can pick its own region on the check screen. Changing it re-baselines each company's ad history: the first check afterwards records the new picture and reports no change, so you never get a false "just started advertising".</div>
+    </div>
+
+    <div class="sec">UK filings (Companies House)</div>
+    <div class="field">
+      <label>API key <button type="button" class="tip" aria-label="More information" data-tip="Powers the 'Raised (UK filing)' signal — new share-issue filings at UK Companies House, the UK equivalent of SEC filings. Get a free key at developer.company-information.service.gov.uk: create an application in the LIVE environment (not Sandbox) of type REST API (not Stream), then copy its key. Leave empty and this signal simply stays off — nothing breaks.">i</button></label>
+      <!-- NOT type=password: Chrome ignores autocomplete=off on password fields and silently
+           autofills the saved email/username — which is exactly how an email address ended up
+           saved here as the "API key". A plain text field with autofill disabled can't be hijacked. -->
+      <div class="inline" style="gap:8px;align-items:center">
+        <input type="text" id="setChKey" name="ch-api-key" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" data-lpignore="true" data-1p-ignore
+               placeholder="empty = UK filings signal off" style="max-width:300px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px" />
+        <button class="btn" id="setChKeyTest" type="button">Test key</button>
+        <button class="btn" id="setChKeyClear" type="button" hidden>Remove key</button>
+      </div>
+      <div class="guide" id="chKeyGuide">Free from <b>developer.company-information.service.gov.uk</b> — create a <b>Live</b> (not Sandbox) <b>REST</b> application, ~2 minutes. Only needed for the UK share-allotment signal.</div>
+    </div>
+
+    <div class="sec">Old jobs</div>
+    <div class="field">
+      <label>When a job gets old… <button type="button" class="tip" aria-label="More information" data-tip="Applies to every search. 'Old' is measured from the posted date, or when we first saw it if the source gave no date.">i</button></label>
+      <div class="seg2" id="setRetMode">
+        <button type="button" data-v="off" class="active">Keep all</button>
+        <button type="button" data-v="hide">Hide it</button>
+        <button type="button" data-v="delete">Delete it</button>
+      </div>
+      <div class="guide" id="retGuide"></div>
+    </div>
+    <div class="field">
+      <label>Consider a job “old” after</label>
+      <div class="inline" style="gap:8px"><input type="number" id="setRetDays" min="1" max="3650" style="max-width:110px"/><span style="color:var(--muted);font-size:12.5px">days</span></div>
+      <div class="guide" id="oldCountGuide">—</div>
+    </div>
+    <div class="guide">To remove old jobs <b>right now</b>, use <b>Hide old…</b> on the postings table. It's scoped to exactly what you're viewing — one monitor, or every monitor in the current tab (Client or Account Monitoring) — and it's <b>reversible</b>: jobs stay in the database and you can <b>Restore</b> them anytime. Uses the day count above.</div>
+
+    <div class="sec">Technologies</div>
+    <div class="field">
+      <label>Detection dictionary <button type="button" class="tip" aria-label="More information" data-tip="HyperSignal scans every job's title and description for these technologies and tags the ones it finds — powering the 'Technology (detected)' filter, the drawer chips, and the Top technologies leaderboard. All local, no cost.">i</button></label>
+      <div class="guide" id="techCount">—</div>
+      <textarea id="techImport" rows="5" aria-label="Technologies to import" placeholder="One technology per line, e.g. React — or  name, category, alias1|alias2  to add a category and alternate spellings — or paste a CSV whose header row is  Technology,Category" style="width:100%;resize:vertical;font-size:12.5px"></textarea>
+      <div class="inline" style="gap:10px;margin-top:8px;align-items:center">
+        <label class="radio"><input type="radio" name="techMode" value="merge" checked/> Merge (add &amp; update)</label>
+        <label class="radio"><input type="radio" name="techMode" value="replace"/> Replace all</label>
+        <button class="btn" id="techImportBtn" type="button">Import list</button>
+        <span class="msg" id="techMsg"></span>
+      </div>
+    </div>
+
+    <div class="sec">Webhook delivery</div>
+    <div class="field">
+      <label>Max jobs per webhook POST <button type="button" class="tip" aria-label="More information" data-tip="When new matches are sent to a search's webhook, they're split into requests of at most this many jobs.">i</button></label>
+      <input type="number" id="setBatch" min="0" max="10000" style="max-width:120px"/>
+      <div class="guide">New matches POST to a search's webhook in batches of this size, so a big backlog never lands as one giant request. <b>0 = no limit</b> (everything in one POST). Each request carries <code>X-HyperSignal-Event</code>, <code>-Client</code>, <code>-Batch</code> (e.g. 2/5) and <code>-Count</code> headers, plus a per-job <code>first_seen_at</code> timestamp (reliable even when <code>posted_at</code> is missing). A failed batch stops delivery and retries next cycle — so no duplicates.</div>
+    </div>
+  </div>
+  <footer>
+    <button class="btn ghost" id="settingsCancel" type="button">Close</button>
+    <button class="btn primary" id="settingsSave" type="button">Save settings</button>
+    <span class="msg" id="settingsMsg"></span>
+  </footer>
+</aside>
+
+<!-- Job detail drawer: full description + facts + links (opens on a matched-row click) -->
+<div class="drawer-bg" id="jdBg"></div>
+<aside class="drawer" id="jobDrawer" aria-hidden="true" inert>
+  <header>
+    <h2 id="jdTitle">Job</h2>
+    <button class="x" id="jdCloseX" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body" id="jdBody"></div>
+</aside>
+
+<!-- Signal detail drawer: full facts + source link + attribution (opens on a signal-row click) -->
+<div class="drawer-bg" id="sigBg"></div>
+<aside class="drawer" id="sigDrawer" aria-hidden="true" inert>
+  <header>
+    <h2 id="sigDTitle">Signal</h2>
+    <button class="x" id="sigDCloseX" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body" id="sigDBody"></div>
+  <footer id="sigDrawerFoot">
+    <button class="btn danger" id="sigDDismiss" type="button">Dismiss signal</button>
+    <a class="btn primary" id="sigDOpen" target="_blank" rel="noopener" style="display:none">Open source</a>
+  </footer>
+</aside>
+
+<!-- Account Monitoring: watchlist editor (domains + role filter + cadence + webhook) -->
+
+<!-- Admin: edit a single job record -->
+<div class="drawer-bg" id="admBg"></div>
+<aside class="drawer" id="adminDrawer" aria-hidden="true" inert>
+  <header>
+    <h2>Edit job</h2>
+    <button class="x" id="admClose" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body">
+    <div class="field"><label>Role / title</label><input type="text" id="admfTitle" /></div>
+    <div class="grid2">
+      <div class="field"><label>Company</label><input type="text" id="admfCompany" /></div>
+      <div class="field"><label>Domain</label><input type="text" id="admfDomain" /></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Location</label><input type="text" id="admfLocation" /></div>
+      <div class="field"><label>State <span class="hint">2-letter</span></label><input type="text" id="admfState" /></div>
+    </div>
+    <div class="grid2">
+      <div class="field"><label>Status</label><select id="admfStatus"><option value="open">open</option><option value="closed">closed</option></select></div>
+      <div class="field"><label>Remote</label><select id="admfRemote"><option value="0">No</option><option value="1">Yes</option></select></div>
+    </div>
+    <div class="field"><label>Posted at <span class="hint">ISO timestamp, or blank</span></label><input type="text" id="admfPosted" placeholder="2026-06-01T00:00:00.000Z" /></div>
+    <div class="field"><label>Apply URL</label><input type="url" id="admfUrl" /></div>
+    <div class="field"><label>Job description <span class="hint">scraped JD text</span></label><textarea id="admfDesc" rows="8" style="font-family:inherit;font-size:12.5px"></textarea></div>
+  </div>
+  <footer>
+    <button class="btn danger" id="admDelete" type="button">Delete</button>
+    <button class="btn ghost" id="admCancel" type="button">Cancel</button>
+    <button class="btn primary" id="admSave" type="button">Save</button>
+    <span class="msg" id="admMsg"></span>
+  </footer>
+</aside>
+
+<!-- Advanced filter builder (shared by Client/Account Monitoring, Account Checking, Jobs database) -->
+<div class="drawer-bg" id="qbBg"></div>
+<aside class="drawer" id="qbDrawer" aria-hidden="true" inert>
+  <header>
+    <h2 id="qbTitle">Advanced filter</h2>
+    <button class="x" id="qbCloseX" data-tip="Close" aria-label="Close">&times;</button>
+  </header>
+  <div class="body">
+    <div class="qb-presets">
+      <select id="qbPreset"><option value="">Saved filters…</option></select>
+      <button class="linklike" id="qbPresetSave" type="button">Save current…</button>
+      <button class="linklike danger" id="qbPresetDel" type="button" style="display:none">Delete</button>
+    </div>
+    <div class="qb-starters" id="qbStarters"></div>
+    <div id="qbRoot"></div>
+  </div>
+  <footer>
+    <label class="check" style="margin-right:auto"><input type="checkbox" id="qbCase" /> Case-sensitive</label>
+    <button class="btn ghost" id="qbClear" type="button">Clear</button>
+    <button class="btn primary" id="qbApply" type="button">Apply filter</button>
+  </footer>
+</aside>
+
+<!-- Support. A plain link, not a script widget: the content-security-policy on this app forbids inline
+     script and third-party origins outright, and nothing about "message us" needs either. wa.me is
+     WhatsApp's own deep link, so this opens the native app when it is installed and the web client
+     when it is not. The number is E.164 with no plus or separators, which is the only form wa.me
+     accepts. The prefilled text saves the first round trip of asking which tool they mean. -->
+<a class="wa-support" id="waSupport"
+   href="https://wa.me/919844190125?text=Hi%2C%20I%20need%20help%20with%20HyperSignal"
+   target="_blank" rel="noopener"
+   data-tip="Message us on WhatsApp (+91 98441 90125). Opens a chat in a new tab."
+   aria-label="Get support on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.885 3.4"/></svg>
+</a>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" role="img" aria-label="HyperSignal">
+  <title>HyperSignal</title>
+  <!-- A radar dial: the scope ring, one solid beam wedge, and the pivot at the centre.
+       The wedge is deliberately solid rather than outlined. An outline of this shape disappears at
+       favicon size; a mass does not, which is why this survives 16px while a broken-ring mark reads
+       as an empty circle there. No container tile and no gradient — one ink, so it reverses onto the
+       brand colour and prints in a single colour without redrawing it. -->
+  <circle cx="12" cy="12" r="9.1" fill="none" stroke="currentColor" stroke-width="1.7" opacity=".38"/>
+  <path d="M12 12 L12 2.9 A9.1 9.1 0 0 1 20.1 7.9 Z" fill="currentColor"/>
+  <circle cx="12" cy="12" r="1.9" fill="currentColor"/>
+</svg>

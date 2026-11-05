@@ -1,0 +1,42 @@
+{
+  "name": "hypersignal-hiring",
+  "version": "0.1.0-alpha.2",
+  "private": true,
+  "type": "module",
+  "description": "Local hiring-signal radar: watch companies, collect job postings and change signals from free public sources, and deliver them to a dashboard and webhooks.",
+  "engines": {
+    "node": ">=22.5"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "probe": "node probe.mjs",
+    "probe:cl": "node probe-craigslist.mjs",
+    "probe:browser": "tsx src/probeBrowser.ts",
+    "cycle": "tsx src/cli.ts cycle",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/test.mjs",
+    "merge:webappanalyzer": "tsx scripts/merge-webappanalyzer.mts",
+    "cache:webappanalyzer": "tsx scripts/cache-webappanalyzer.mts"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "express": "^4.21.2",
+    "fingerprint-generator": "^2.1.58",
+    "fingerprint-injector": "^2.1.58",
+    "js-yaml": "^4.1.0",
+    "node-cron": "^4.6.0",
+    "playwright": "^1.49.1",
+    "rss-parser": "^3.13.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.10.5",
+    "@types/node-cron": "^3.0.11",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0"
+}
